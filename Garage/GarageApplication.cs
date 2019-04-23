@@ -69,13 +69,19 @@ namespace GarageProject
             }
         }
 
-        private void ShowVehicleData()
+        private bool InitializedP()
         {
             if (!theHandler.Initialized())
             {
                 Console.WriteLine("The garage must be built before it can be used\n");
-                return;
+                return false;
             }
+            return true; 
+        }
+
+        private void ShowVehicleData()
+        {
+            if (!InitializedP()) return; 
             Console.WriteLine("What is the vehicle's license number?");
             string license = Console.ReadLine().ToUpper(); 
             var vehicl = theHandler.FindVehicle(license);
@@ -90,21 +96,13 @@ namespace GarageProject
 
         private void PermanentBackup()
         {
-            if (!theHandler.Initialized())
-            {
-                Console.WriteLine("The garage must be built before it can be used\n");
-                return;
-            }
+            if (!InitializedP()) return;
             throw new NotImplementedException();
         }
 
         private void RemoveVehicle()
         {
-            if (!theHandler.Initialized())
-            {
-                Console.WriteLine("The garage must be built before it can be used\n");
-                return;
-            }
+            if (!InitializedP()) return;
             Console.WriteLine("Which vehicle do you want to remove (license)?");
             string inString = Console.ReadLine().ToUpper();
             if (theHandler.RemoveVehicle(inString)) Console.WriteLine($"Vehicle {inString} was successfully removed.\n");
@@ -139,11 +137,7 @@ namespace GarageProject
                 }
             }
 
-            if (!theHandler.Initialized())
-            {
-                Console.WriteLine("The garage must be built before it can be used\n");
-                return;
-            }
+            if (!InitializedP()) return;
             Console.WriteLine("What does the license plate say?");
             string license = Console.ReadLine().ToUpper();
             Console.WriteLine("What color is the vehicle?");
@@ -202,11 +196,7 @@ namespace GarageProject
 
         private void ListVehicles()
         {
-            if (!theHandler.Initialized())
-            {
-                Console.WriteLine("The garage must be built before it can be used");
-                return;
-            }
+            if (!InitializedP()) return;
             IEnumerable<Vehicle> localGarage = theHandler.ListVehicles();
             if (localGarage.Count() == 0) Console.WriteLine("The garage is empty.");
             else
@@ -246,6 +236,7 @@ namespace GarageProject
 
         private void FindVehiclesWithProperties()
         {
+            if (!InitializedP()) return;
             Console.WriteLine("For each line, specify value of named vehicle property.");
             Console.WriteLine("Empty line (Return) is interpreted as accepting any value.");
             Console.WriteLine("Color:");
